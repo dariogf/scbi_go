@@ -1,6 +1,6 @@
 module ScbiGo
   class GoTerm
-  	attr_accessor :id, :name, :def, :namespace, :subset, :comment, :consider, :synonym, :children
+  	attr_accessor :id, :name, :def, :namespace, :subset, :comment, :consider, :synonym
 
   	def initialize(go_term, gene_ontology)
   		@term_type=go_term.name
@@ -45,18 +45,24 @@ module ScbiGo
   		"#{@term_type}:#{@id}, #{@name}, is_a: #{@is_a}"
   	end
 
+    def parents
+      is_a
+    end
+
+    def children
+      @children
+    end
+
 
   	#iterators
   	def descendants
 
-  		children = @children
   		res=children
   		children.each {|c| res += c.descendants}
   		return res.uniq
   	end
 
   	def ancestors 
-  		parents = @is_a
   		res=parents
   		parents.each {|c| res += c.ancestors}
   		return res.uniq
@@ -71,6 +77,21 @@ module ScbiGo
   		res = [self] + self.ancestors
   		return res.uniq
   	end
+
+    def all_branches_to_top
+      res=[]
+      if parents.count==1
+        res = [self.id] + parents.first.all_branches_to_top
+      else
+        parents.each do |parent|
+            res << [self.id] + parent.all_branches_to_top
+        end
+      end
+
+      puts res
+      return res
+
+    end
 
   end
 end

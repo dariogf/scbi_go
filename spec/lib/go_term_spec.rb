@@ -51,4 +51,17 @@ describe ScbiGo::GoTerm do
 		expect(term.self_and_ancestors.map(&:id)).to end_with ["GO:0071840", "GO:0008150"]
 	end
 
+	it "Should have a branch to top" do
+		term=@go.find_go('GO:0050789')
+		expect(term.all_branches_to_top.count).to eq 1
+		
+	end
+
+	it "Should have a branch to top with only me" do
+		term=@go.find_go('GO:0003674')
+		expect(term.all_branches_to_top).to match_array(["GO:0003674"])
+		
+	end
+
+
 end
