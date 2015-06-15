@@ -79,16 +79,20 @@ module ScbiGo
   	end
 
     def all_branches_to_top
+
       res=[]
-      if parents.count==1
-        res = [self.id] + parents.first.all_branches_to_top
+      if parents.count == 0
+        res = [[self]]
       else
         parents.each do |parent|
-            res << [self.id] + parent.all_branches_to_top
+            parent_b = parent.all_branches_to_top
+            parent_b.each do |pb|
+              res << pb.unshift(self)
+            end
         end
       end
 
-      puts res
+      #puts res.to_json
       return res
 
     end

@@ -51,17 +51,40 @@ describe ScbiGo::GoTerm do
 		expect(term.self_and_ancestors.map(&:id)).to end_with ["GO:0071840", "GO:0008150"]
 	end
 
-	it "Should have a branch to top" do
+	#http://www.ebi.ac.uk/QuickGO/GTerm?id=GO:0050789#term=ancchart
+	it "Should have only one branch to top" do
 		term=@go.find_go('GO:0050789')
+		expect(term.all_branches_to_top.map{|e| e.map(&:id)}).to match_array([['GO:0050789','GO:0065007','GO:0008150']])
 		expect(term.all_branches_to_top.count).to eq 1
-		
+	end
+
+	#http://www.ebi.ac.uk/QuickGO/GTerm?id=GO:0031323#term=ancchart
+	it "Should have two branches to top" do
+		term=@go.find_go('GO:0031323')
+		expect(term.all_branches_to_top.map{|e| e.map(&:id)}).to match_array([["GO:0031323","GO:0019222","GO:0050789","GO:0065007","GO:0008150"],["GO:0031323","GO:0050794","GO:0050789","GO:0065007","GO:0008150"]])
+		expect(term.all_branches_to_top.count).to eq 2
 	end
 
 	it "Should have a branch to top with only me" do
 		term=@go.find_go('GO:0003674')
-		expect(term.all_branches_to_top).to match_array(["GO:0003674"])
-		
+		expect(term.all_branches_to_top.map{|e| e.map(&:id)}).to match_array([["GO:0003674"]])
 	end
 
+	it "Should have 10 branches to top" do
+		term=@go.find_go('GO:2001141')
+		expect(term.all_branches_to_top.count).to eq 10
+		res = [["GO:2001141", "GO:0010556", "GO:0009889", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0010556", "GO:0060255", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0031326", "GO:0009889", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0031326", "GO:0031323", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0031326", "GO:0031323", "GO:0050794", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0051252", "GO:0019219", "GO:0031323", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0051252", "GO:0019219", "GO:0031323", "GO:0050794", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0051252", "GO:0019219", "GO:0051171", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0051252", "GO:0019219", "GO:0080090", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"], 
+			 ["GO:2001141", "GO:0051252", "GO:0060255", "GO:0019222", "GO:0050789", "GO:0065007", "GO:0008150"]]
 
+		expect(term.all_branches_to_top.map{|e| e.map(&:id)}).to match_array(res)
+	end
 end
+
