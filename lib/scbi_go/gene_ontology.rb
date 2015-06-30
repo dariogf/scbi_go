@@ -1,13 +1,25 @@
+require 'zlib'
+
 module ScbiGo
   class GeneOntology
 
   	attr_accessor :gos, :header, :base_terms
   	
-    # load a new gene ontology fiel in obo format
+    # load a new gene ontology fiel in obo format, in gz or un-gzipped format
+  	def initialize(filename='lib/data/go.obo.gz')
 
-  	def initialize(filename='lib/data/go.obo')
+      if !File.exists?(filename)
+        raise "File does not exists: #{filename}"
+      end
       #t1=Time.now
       @filename=filename
+      begin
+        my_obo_file=Zlib::GzipReader.open(filename)
+      rescue Zlib::GzipFile::Error # not in gzip file
+        my_obo_file=File.open(@filename) # open as normal file
+      end
+
+      
       #@cache_filename='/dev/shm/'+File.basename(@filename)+'.dump'
       @base_terms=[]
       @gos={}
@@ -24,8 +36,8 @@ module ScbiGo
       # else
 
     		# Parse Obo data file with external lib
-    		obo = Obo::Parser.new(@filename)
-    		go_list = obo.elements.to_a
+    		obo = Obo::Parser.new(filename)
+    		go_list = obo.elements(my_obo_file).to_a
     		obo=nil
 
     		#first element is header
@@ -43,7 +55,7 @@ module ScbiGo
         #save cache file
       #   Marshal.dump(self, File.new(@cache_filename,'w'))
       # end
-      # puts "Load time #{Time.now-t1} seg"
+      #puts "Load time #{Time.now-t1} seg"
   	end
 
   	# find a go_term by it name
