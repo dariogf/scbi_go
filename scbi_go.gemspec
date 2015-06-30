@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["dariogf"]
   spec.email         = ["dariogf@gmail.com"]
   spec.summary       = %q{GeneOntology tools.}
-  spec.description   = %q{GeneOntology tools to summarize go terms}
+  spec.description   = %q{GeneOntology tools to summarize and graph go terms}
   spec.homepage      = ""
   spec.license       = "MIT"
 

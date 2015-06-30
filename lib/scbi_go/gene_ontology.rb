@@ -3,7 +3,8 @@ module ScbiGo
 
   	attr_accessor :gos, :header, :base_terms
   	
-    
+    # load a new gene ontology fiel in obo format
+
   	def initialize(filename='lib/data/go.obo')
       #t1=Time.now
       @filename=filename
@@ -61,23 +62,24 @@ module ScbiGo
   		end
   	end
 
-    def list_to_terms(go_list)
+    #convert a list of go names to terms, ignore not found gos
+    def go_list_to_terms(go_list)
       res=[]
 
       go_list.each do |s|
-        if s.is_a?(String)
-          res << find_go(s)
-        else
+        if s.is_a?(GoTerm)
           res << s
+        else
+          res << find_go(s)
         end
       end
 
-      return res
+      return res.compact
     end
 
 private
 
-    #replace is_a strings with objects and add children links to parents
+    # add children links to parents once Go file is loaded
   	def add_children_relations
   		@gos.each do |go_id, go|
   			go.is_a.each do |parent|

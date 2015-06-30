@@ -1,6 +1,7 @@
 module ScbiGo
   class AncestorsGraph < BaseGraph
 
+    # override the way that nodes are painted in dot
   	def build_dot_lines(nodes)
 
 		res =[]

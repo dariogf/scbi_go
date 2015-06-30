@@ -1,6 +1,7 @@
 module ScbiGo
   class BaseGraph
 
+    #create a dot file and optional pdf file
   	def initialize(nodes, file_name=nil, name='my_graph', generate_pdf=false)
       @graph_name=name
 
@@ -20,6 +21,7 @@ module ScbiGo
       end 
     end
   	
+    # define the way that nodes are painted in dot
     def build_dot_lines(nodes)
 
       res =[]
