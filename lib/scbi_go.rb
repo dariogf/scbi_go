@@ -7,6 +7,7 @@ require 'scbi_go/ancestors_graph'
 require 'scbi_go/descendants_graph'
 require 'scbi_go/go_term'
 require 'scbi_go/gene_ontology'
+require 'scbi_go/go_list_reducer'
 
 
 module ScbiGo

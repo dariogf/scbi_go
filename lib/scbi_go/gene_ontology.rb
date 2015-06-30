@@ -61,6 +61,20 @@ module ScbiGo
   		end
   	end
 
+    def list_to_terms(go_list)
+      res=[]
+
+      go_list.each do |s|
+        if s.is_a?(String)
+          res << find_go(s)
+        else
+          res << s
+        end
+      end
+
+      return res
+    end
+
 private
 
     #replace is_a strings with objects and add children links to parents
